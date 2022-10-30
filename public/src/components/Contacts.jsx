@@ -1,24 +1,134 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
 import GroupChat from "../assets/GroupChat.png";
 import CloseIcon from "../assets/CloseIcon.png";
+import AvatarGroupChat from "../assets/avatarGroupChat.webp";
+import { ToastContainer, toast } from "react-toastify";
+import { createGroupChat } from "../utils/APIRoutes";
+import { useNavigate, Link } from "react-router-dom";
 
-export default function Contacts({ contacts, changeChat }) {
+export default function Contacts({ contactsGroup, contacts, changeChat, typeChat }) {
+  const navigate = useNavigate();
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
+  const [currentUserId, setCurrentUserId] = useState(undefined);
+
+
   useEffect(async () => {
     const data = await JSON.parse(
       localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
     );
     setCurrentUserName(data.username);
     setCurrentUserImage(data.avatarImage);
+    setCurrentUserId(data._id);
   }, []);
-  const changeCurrentChat = (index, contact) => {
+
+  useEffect(() => {
+    if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+      navigate("/");
+    }
+  }, []);
+
+  const changeCurrentChat = (index, contact,type) => {
     setCurrentSelected(index);
     changeChat(contact);
+    typeChat(type);
+    
   };
+
+  const handlePopup = () => {
+        var popup = document.getElementById("popup_info_group");
+        popup.classList.toggle("show"); 
+  };
+
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
+  const [values, setValues] = useState({
+    userCreate: "",
+    nameGroup: "",
+    listUser: new Set(),
+  });
+  const handleValidation = () => {
+    const { nameGroup, listUser } = values;
+    if (nameGroup.length < 1) {
+      toast.error(
+        "Chưa nhập tên nhóm!",
+        toastOptions
+      );
+      return false;
+    } else if (listUser.size < 1) {
+      toast.error(
+        "Chưa chọn thành viên nhóm!",
+        toastOptions
+      );
+      return false;
+    } else if (listUser.size < 2) {
+      toast.error(
+        "Thành viên nhóm phải từ 3 thành viên!",
+        toastOptions
+      );
+      return false;
+    }
+    return true;
+  };
+
+  const handleChangeNameGroup = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value });
+  };
+
+  const handleAddListUser = (id) => {
+    const { listUser } = values;
+    let listUserChecked = new Set();
+    listUserChecked =listUser;
+
+    if(listUserChecked.has(id)){
+      listUserChecked.delete(id);
+    }else{
+      listUserChecked.add(id);
+    }
+    setValues({ ...values, listUser:listUserChecked });
+  };
+
+  const handleSubmit = async (event) => {
+    setValues({ ...values, userCreate:currentUserId });
+    const {userCreate, nameGroup, listUser } = values;
+    event.preventDefault();
+    let arr = new Array();
+
+    for (const value of listUser) {
+      arr.push(value);
+    }
+    arr.push(userCreate);
+    
+    if (handleValidation()) {
+      const { data } = await axios.post(createGroupChat, {
+        userCreate,
+        nameGroup,
+        listUser:arr,
+      });
+
+      if (data.status === false) {
+        toast.error(
+          data.msg,
+          toastOptions
+        );
+      }
+      if (data.status === true) {
+        navigate("/");
+        window.location.reload();
+  
+      }
+    }
+  };
+
   return (
     <>
       {currentUserImage && currentUserImage && (
@@ -40,9 +150,9 @@ export default function Contacts({ contacts, changeChat }) {
                 <div
                   key={contact._id}
                   className={`contact ${
-                    index === currentSelected ? "selected" : ""
+                    contact._id === currentSelected ? "selected" : ""
                   }`}
-                  onClick={() => changeCurrentChat(index, contact)}
+                  onClick={() => changeCurrentChat(contact._id, contact, "contact")}
                 >
                   <div className="avatar">
                     <img
@@ -52,6 +162,24 @@ export default function Contacts({ contacts, changeChat }) {
                   </div>
                   <div className="username">
                     <h3>{contact.username}</h3>
+                  </div>
+                </div>
+              );
+            })}
+             {contactsGroup.map((contactGroup, index) => {
+              return (
+                <div
+                  key={contactGroup._id}
+                  className={`contact ${
+                    contactGroup._id === currentSelected ? "selected" : ""
+                  }`}
+                  onClick={() => changeCurrentChat(contactGroup._id, contactGroup,"group")}
+                >
+                  <div className="avatar">
+                  <img src={AvatarGroupChat} alt="AvatarGroupChat" />
+                  </div>
+                  <div className="username">
+                    <h3>{contactGroup.nameGroup}</h3>
                   </div>
                 </div>
               );
@@ -77,46 +205,51 @@ export default function Contacts({ contacts, changeChat }) {
                  <img src={CloseIcon} alt="CloseIcon" />
                 </a>
               </div>
-
-              <div className="viewInputNameGroup">
-                <img src={GroupChat} alt="GroupChat" />
-                <input
-                  type="text"
-                  placeholder="Nhập tên nhóm"
-                  name="nameGroup"
-                  // onChange={(e) => handleChange(e)}
-                  min="3"
-                />
-              </div>
-              <div className="listUser">
-                {contacts.map((contact, index) => {
-                return (
-                  <div
-                    key={contact._id}
-                    className={`contact ${
-                      index === currentSelected ? "selected" : ""
-                    }`}
-                    onClick={() => changeCurrentChat(index, contact)}
-                  >
-                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"></input>
-                    <div className="avatar">
-                      <img
-                        src={`data:image/svg+xml;base64,${contact.avatarImage}`}
-                        alt=""
-                      />
+              <form className="bodyPopup" action="" onSubmit={(event) => handleSubmit(event)}>
+                <div className="viewInputNameGroup">
+                  <img src={AvatarGroupChat} alt="AvatarGroupChat" />
+                  <input
+                    type="text"
+                    placeholder="Nhập tên nhóm"
+                    name="nameGroup"
+                    onChange={(e) => handleChangeNameGroup(e)}
+                    min="3"
+                  />
+                </div>
+                <div className="listUser">
+                  {contacts.map((contact, index) => {
+                  return (
+                    <div
+                      key={contact._id}
+                      className={`contact ${
+                        index === currentSelected ? "selected" : ""
+                      }`}
+                    >
+                      <input type="checkbox" 
+                        id="listUser" 
+                        name="listUser" 
+                        value={contact._id} 
+                        onChange={(e) => handleAddListUser(contact._id)} ></input>
+                      <div className="avatar">
+                        <img
+                          src={`data:image/svg+xml;base64,${contact.avatarImage}`}
+                          alt=""
+                        />
+                      </div>
+                      <div className="username">
+                        <h3>{contact.username}</h3>
+                      </div>
                     </div>
-                    <div className="username">
-                      <h3>{contact.username}</h3>
-                    </div>
-                  </div>
-                  );
-                })}
-              </div>
-              <button  className="submit-btn">
-                 Tạo nhóm
-              </button>
+                    );
+                  })}
+                </div>
+                <button className="submit-btn" type="submit" >
+                  Tạo nhóm
+                </button>
+              </form>
             </div>
           </div>
+          <ToastContainer />
         </Container>
         
       )}
@@ -224,7 +357,7 @@ const Container = styled.div`
     }
   }
     .popupMain:target{
-      visibility:visible;
+      visibility: visible;
     }
 
     .popupMain{
@@ -266,7 +399,13 @@ const Container = styled.div`
         text-align: right;
       }
     }
-
+    .bodyPopup{
+      width:100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 90%;
+    }
     .viewInputNameGroup{
       padding:0px 5px;
       height: 8%;
@@ -287,7 +426,7 @@ const Container = styled.div`
         padding: 0.8rem;
         border: 0.1rem solid #4e0eff;
         border-radius: 0.4rem;
-        color: white;
+        color: #4e0eff;
         width: 100%;
         font-size: 1rem;
         &:focus {
@@ -298,7 +437,7 @@ const Container = styled.div`
     }
 
     .listUser{
-      height: 70%;
+      height:80%;
       width:100%;
       margin:5px;
       display: flex;
@@ -321,7 +460,6 @@ const Container = styled.div`
       .contact {
         background-color: #ffffff34;
         min-height: 4rem;
-        cursor: pointer;
         width: 90%;
         padding: 0.4rem;
         display: flex;
