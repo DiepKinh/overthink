@@ -12,3 +12,6 @@ export const getGroupChat = `${host}/api/group/getgroup`;
 export const addMessageGroup = `${host}/api/messages/addmessgroup`;
 export const getMessageGroup = `${host}/api/messages/getmessgroup`;
 export const leaveGroup = `${host}/api/group/leavegroup`;
+export const deleteGroup = `${host}/api/group/deletegroup`;
+export const adminleaveGroup = `${host}/api/group/adminleavegroup`;
+export const findListUserFromGroup = `${host}/api/group/findlistusergroup`;

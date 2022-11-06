@@ -4,9 +4,17 @@ import ChatInput from "./ChatInput";
 import Logout from "./Logout";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
-import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes";
+import { sendMessageRoute, recieveMessageRoute,logoutRoute } from "../utils/APIRoutes";
+import CloseIcon from "../assets/CloseIcon.png";
+import Leave from "../assets/leave.png";
+import Remove from "../assets/remove.png";
+import ConfirmIcon from "../assets/confirm.png";
+import CancelIcon from "../assets/CancelIcon.png";
+import { useNavigate, Link } from "react-router-dom";
+import { BiPowerOff } from "react-icons/bi";
 
 export default function ChatContainer({ currentChat, socket }) {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
   const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -69,6 +77,22 @@ export default function ChatContainer({ currentChat, socket }) {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const handlePopupConfirmLogout = () =>{
+    var popup = document.getElementById("popup-confirm-logout");
+    popup.classList.toggle("showPopupLogout"); 
+  }
+
+  const handleClick = async () => {
+    const id = await JSON.parse(
+      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+    )._id;
+    const data = await axios.get(`${logoutRoute}/${id}`);
+    if (data.status === 200) {
+      localStorage.clear();
+      navigate("/login");
+    }
+  };
+
   return (
     <Container>
       <div className="chat-header">
@@ -83,7 +107,10 @@ export default function ChatContainer({ currentChat, socket }) {
             <h3>{currentChat.username}</h3>
           </div>
         </div>
-        <Logout />
+        {/* <Logout /> */}
+        <div onClick={()=>handlePopupConfirmLogout()} className="buttonLogout">
+          <BiPowerOff />
+        </div>
       </div>
       <div className="chat-messages">
         {messages.map((message) => {
@@ -103,6 +130,33 @@ export default function ChatContainer({ currentChat, socket }) {
         })}
       </div>
       <ChatInput handleSendMsg={handleSendMsg} />
+      <div className="popupConfirmLogout" id="popup-confirm-logout">
+        <div className="headerPopupLogout">
+          <h4>Bạn chắc chắn muốn đăng xuất?</h4>
+          <div className="closePopupLogout" onClick={() => handlePopupConfirmLogout()}>
+              <img
+                src={CloseIcon}
+                alt="CloseIcon"
+              />
+          </div>
+        </div>
+        <div className="bodyPopupLogout">
+            <div className="buttonCancelPopupLogout" onClick={() => handleClick()}>
+              <img
+                  src={ConfirmIcon}
+                  alt="ConfirmIcon"
+              />
+              <p>Xác nhận</p>
+            </div>
+            <div className="buttonCofirmPopupLogout" onClick={() => handlePopupConfirmLogout()}>
+            <img
+                src={CancelIcon}
+                alt="CancelIcon"
+              />
+              <p>Huỷ</p>
+            </div>
+          </div>
+      </div>
     </Container>
   );
 }
@@ -177,5 +231,96 @@ const Container = styled.div`
         background-color: #9900ff20;
       }
     }
+  }
+  .buttonLogout{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #9a86f3;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    svg {
+      font-size: 1.3rem;
+      color: #ebe7ff;
+    }
+  }
+  .popupConfirmLogout{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    width: 25%;
+    height:15%;
+    background-color: #ffffff;
+    position: absolute;
+    left:700px;
+    top: 250px;
+    padding:10px;
+    visibility:hidden;
+  }
+
+  .headerPopupLogout{
+    width: 100%;
+    height:20%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    h4{
+      width: 90%;
+      align-items: center;
+      color: #0d0d30;
+    }
+    .closePopupLogout{
+      display: flex;
+      img{
+        justify-content: flex-end;
+      width: 2rem;
+      }
+    }
+  }
+  .bodyPopupLogout{
+    width: 100%;
+    height:40%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .buttonCancelPopupLogout{
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      background-color: #bfb;
+      border-radius: 1rem;
+      padding:7px 12px;
+      justify-content: space-between;
+      img{
+        width: 2rem;
+      }
+    }
+
+    .buttonCofirmPopupLogout{
+      width: 100px;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      background-color: #fbf;
+      border-radius: 1rem;
+      padding:7px 10px;
+      justify-content: space-around;
+      img{
+        width:1.6rem;
+      }
+    }
+  }
+  .showPopupLogout {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
   }
 `;

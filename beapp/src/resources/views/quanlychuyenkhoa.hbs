@@ -1,0 +1,128 @@
+<div class=" row quanlychuyenkhoa">
+        <div class="col-sm-2">
+            {{>menubar}}
+        </div>
+        <div class="col-sm-10">
+            <div>
+                {{>header}}
+            </div>
+            <div class="main-home ">
+                 <div class="container mt-3">
+                    <h3>Quản Lý Chuyên Khoa</h3>
+                    <div class="line" ></div>
+                    <br/>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#home" >
+                                <i class="fa fa-address-book"></i><span>Chuyên Khoa</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#menu1">
+                                <i class="fa fa-list-alt"></i><span>Danh Sách Chuyên Khoa</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="home" class="container tab-pane fade"><br />
+                            <div class="row" style="margin-left: 0px;">
+                                <div class="title-line"></div>
+                                <h5>Thông tin chuyên khoa</h5>
+                            </div>
+                            <form action="" method="" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="sel1">Mã chuyên khoa: </label>
+                                            <input type="text" name="MaKhoa" value="{{khoaChinhSua.MaKhoa}}"
+                                                class="form-control" placeholder="Mã chuyên khoa..." readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="sel1">Tên chuyên khoa: </label>
+                                            <input  type="text" value="{{khoaChinhSua.TenKhoa}}" name="TenBacSi"
+                                                class="form-control" placeholder="Tên chuyên khoa...">
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                                <div class="row" style="margin-top: 20px;">
+                                    <div class="col-lg-4" style="display: flex; justify-content: center;">
+                                        <button type="button" onclick="ThemKhoaVien(this);" 
+                                            class="btn btn-primary">THÊM</button>
+                                    </div>
+                                    <div class="col-lg-4" style="display: flex; justify-content: center;">
+                                        <button type="button" onclick="LuuChinhSuaKhoa(this);" class="btn btn-warning">CHỈNH
+                                            SỬA</button>
+                                    </div>
+                                    <div class="col-lg-4" style="display: flex; justify-content: center;" >
+                                        <button type="button" class="btn btn-secondary">LÀM MỚI</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="menu1" class="container tab-pane active div-table-list"><br />
+                            <form action="">
+                                <div class="card mb-4">
+                                    <div class="card-header" style="color: #06a881;font-weight: 600;">
+                                        <i class="fas fa-table me-1"></i>
+                                        Bảng hiển thị danh sách khoa/ viện
+                                    </div>
+                                    <div class="" style="margin: 20px;">
+                                        <table class="table table-bordered" id="table_id">
+                                            <thead>
+                                                <tr>
+                                                    <th>STT</th>
+                                                    <th>Mã chuyên khoa</th>
+                                                    <th>Tên chuyên khoa</th>
+                                                    <th>Thao Tác</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>123456789</td>
+                                                    <td>Nhi Khoa</td>
+                                                    <td colspan="4">
+                                                       <a href="#" class="btn btn-info">Xem Chi tiết</a>
+                                                    <a href="#" class="btn btn-warning">Chỉnh Sửa</a>
+                                                    <a href="/quanly-lophp/delete?MaLopHP={{this.MaLopHP}}" onclick="return confirm ('Xoá lớp học phần {{this.TenMonHoc}} ( {{this.TenLopHP}} ) ?')" class="btn btn-danger">Xóa</a>
+                                                    </td>
+                                                </tr>
+                                                 <tr>
+                                                    <td>2</td>
+                                                    <td>123456789</td>
+                                                    <td>Chuẩn đoán hình ảnh</td>
+                                                    <td colspan="4">
+                                                       <a href="#" class="btn btn-info">Xem Chi tiết</a>
+                                                    <a href="#" class="btn btn-warning">Chỉnh Sửa</a>
+                                                    <a href="/quanly-lophp/delete?MaLopHP={{this.MaLopHP}}" onclick="return confirm ('Xoá lớp học phần {{this.TenMonHoc}} ( {{this.TenLopHP}} ) ?')" class="btn btn-danger">Xóa</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>123456789</td>
+                                                    <td>Hô hâp và miễn dịch dị ứng lâm sàng</td>
+                                                    <td colspan="4">
+                                                       <a href="#" class="btn btn-info">Xem Chi tiết</a>
+                                                    <a href="#" class="btn btn-warning">Chỉnh Sửa</a>
+                                                    <a href="/quanly-lophp/delete?MaLopHP={{this.MaLopHP}}" onclick="return confirm ('Xoá lớp học phần {{this.TenMonHoc}} ( {{this.TenLopHP}} ) ?')" class="btn btn-danger">Xóa</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+ </div>
+        
+        

@@ -1,0 +1,194 @@
+<div class=" row dangkylichranh">
+        <div class="col-sm-2">
+            {{>menubar}}
+        </div>
+        <div class="col-sm-10">
+            <div>
+                {{>header}}
+            </div>
+            <div class="main-home ">
+                <div class="container mt-3">
+                    <h3>Quản Lý Lịch Khám Của Bác Sĩ</h3>
+                    <div class="line" ></div>
+                    <br/>
+                    <div class="thong-tin-ca-nhan row">
+                        <div class="nav anh-bac-si col col-lg-3">
+                            <img src="https://thuthuatnhanh.com/wp-content/uploads/2021/02/Avatar-ngau-dep-390x390.jpg" 
+                            alt="ảnh thẻ sinh viên" class="img-reponsive">
+                            <div class="rol">
+                                <div class="form-group">
+                                <div class="control-label">
+                                    <b>Thạc sĩ, Bác sĩ: Bùi Thị Mỹ Duyên</b>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="control-label">
+                                    <span lang="thongtinsinhvien-mssv">Mã Bác sĩ</span>:
+                                    <b>123456789</b>
+                                </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                <div class="control-label">
+                                    <span lang="thongtinsinhvien-gioitinh">Giới tính</span>:
+                                    <b>Nữ</b>
+                                </div>
+                                <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="text-title">
+                                <p>
+                                Thông tin Bác Sĩ
+                                </p>
+                                <hr style="width:100%;color:#cccccc" />
+                            </div>
+                            <div class="main-thong-tin">
+                                <div class="col-md-12">
+                                <form class="form-horizontal">
+                                    <div class="form-body">
+                                    <div class="form-group">
+                                        <label class="col-md-6"><span lang="thongtinbáci-trangthai">Email</span>:
+                                        <span class="bold"> myduyen121@gmail.com </span></label>
+                                        <label class=""><span lang="thongtinbáci-ngayvaotruong">Ngày sinh</span>:
+                                        <span class="bold">12/01/2000</span></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-6"><span lang="thongtinbáci-lophoc">Số điện thoại</span>:
+                                        <span class="bold">0333 456 789</span></label>
+                                       <label class=""><span lang="thongtinbáci-bacdaotao">Chuyên khoa</span>:
+                                        <span class="bold">Nhi khoa</span></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-6"><span lang="thongtinbáci-loaidaotao">Chức vụ</span>:
+                                        <span class="bold">Bác sĩ trưởng khoa</span></label>
+                                         <label class=""><span lang="thongtinbáci-chuyennganh">Kinh nghiệm</span>:
+                                        <span class="bold">10 năm</span></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-6"><span lang="thongtinbáci-nganh">Trạng thái</span>:
+                                        <span class="bold">Đang làm </span></label>
+                                         <label class=""><span lang="thongtinbáci-khoahoc">Đơn giá</span>:
+                                        <span class="bold">300.000 VNĐ</span></label>
+                                    </div>
+                                    <div class="form-group">
+                                         <label class="col-md-12"><span lang="thongtinbáci-coso">Địa chỉ khám</span>:
+                                        <span class="bold">152/2/22 Cây Trâm - phường 4 - Gò Vấp - TPHCM</span></label>
+                                    </div>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content-dangky"><br />
+                        <div class="row" style="margin-left: 0px;">
+                            <div class="title-line"></div>
+                            <h5>Đăng ký lịch khám</h5>
+                        </div>
+                        <form action="" method="" enctype="multipart/form-data" style="margin-top: 10px;">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="sel1">Ngày khám: </label>
+                                        <input type="date" name="NgayKham"  value="" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="sel1">Buổi:</label>
+                                        <select class="form-control" id="ChonGioiTinh">
+                                            <option value="Sáng">Sáng</option>
+                                            <option value="Chiều">Chiều</option>
+                                            <option value="Tối">Tối</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="sel1">Giờ khám:</label>
+                                        <select class="form-control" id="ChonGioiTinh">
+                                            <option value="7h - 9h">7h - 9h</option>
+                                            <option value="9h-11h">7h - 9h</option>
+                                            <option value="11-13h">11h - 13h</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 20px;">
+                                <div class="col-lg-12" style="display: flex; justify-content: center; height: 45px;">
+                                    <button type="button" onclick="ThemKhoaVien(this);" 
+                                        class="btn btn-primary">ĐĂNG KÝ   </button>
+                                </div>
+                          
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="tab-content-lichdadangky"><br />
+                        <div class="row" style="margin-left: 0px;">
+                            <div class="title-line"></div>
+                            <h5>Danh sách lịch khám đã đăng ký</h5>
+                        </div>
+                        <div class="" style="margin-top: 10px;">
+                            <table class="table table-bordered" id="table_id" >
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Ngày đăng ký</th>
+                                        <th>Buổi</th>
+                                        <th>Giờ khám</th>
+                                        <th>Trạng thái</th>
+                                        <th>Họ tên bệnh nhân</th>
+                                        <th>Thao Tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>12/03/2022</td>
+                                        <td>Sáng</td>
+                                        <td>7h - 9h</td>
+                                        <td>Chờ bệnh nhân đăng ký</td>
+                                        <td></td>
+                                        <td>
+                                            <a href="/quanly-lophp/delete?MaLopHP={{this.MaLopHP}}" onclick="return confirm ('Xoá lớp học phần {{this.TenMonHoc}} ( {{this.TenLopHP}} ) ?')" class="btn btn-danger">Huỷ</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>12/03/2022</td>
+                                        <td>Sáng</td>
+                                        <td>9h - 11h</td>
+                                        <td>Chờ Bác Sĩ chấp nhận</td>
+                                        <td>Bùi Hoàng Phát</td>
+                                       <td>
+                                            <a href="/quanly-lophp/delete?MaLopHP={{this.MaLopHP}}" onclick="return confirm ('Xoá lớp học phần {{this.TenMonHoc}} ( {{this.TenLopHP}} ) ?')" class="btn btn-danger">Huỷ</a>
+                                            <a href="#" class="btn btn-success">Chấp nhận</a>
+                                        </td>
+                                    </tr>
+                                     <tr>
+                                        <td>3</td>
+                                        <td>12/03/2022</td>
+                                        <td>Chiều</td>
+                                        <td>13h - 15h</td>
+                                        <td>Bác Sĩ đã xác nhận</td>
+                                        <td>Bùi Hoàng Phát</td>
+                                       <td>
+                                            <a href="/quanly-lophp/delete?MaLopHP={{this.MaLopHP}}" onclick="return confirm ('Xoá lớp học phần {{this.TenMonHoc}} ( {{this.TenLopHP}} ) ?')" class="btn btn-danger">Huỷ</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+                    
+                </div>
+            </div>
+        </div>
+ </div>
+        
+        

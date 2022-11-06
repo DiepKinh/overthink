@@ -4,13 +4,14 @@ import ChatInput from "./ChatInput";
 import Logout from "./Logout";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
-import {addMessageGroup ,getMessageGroup, leaveGroup,logoutRoute} from "../utils/APIRoutes";
+import {addMessageGroup ,getMessageGroup, leaveGroup,logoutRoute,deleteGroup, adminleaveGroup ,findListUserFromGroup} from "../utils/APIRoutes";
 import AvatarGroupChat from "../assets/avatarGroupChat.webp";
 import CloseIcon from "../assets/CloseIcon.png";
 import Leave from "../assets/leave.png";
 import Remove from "../assets/remove.png";
 import ConfirmIcon from "../assets/confirm.png";
 import CancelIcon from "../assets/CancelIcon.png";
+import Warning from "../assets/warning.png";
 import { useNavigate, Link } from "react-router-dom";
 import { BiPowerOff } from "react-icons/bi";
 
@@ -19,6 +20,9 @@ export default function ChatGroupContainer({ currentChat, socket }) {
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [isUserCreateGroup, setIsUserCreateGroup] = useState(false);
+  const [userCreateNew, setUserCreateNew] = useState(null);
+  const [listUsers, setListUsers] = useState([]);
 
   useEffect(async () => {
     const data = await JSON.parse(
@@ -29,6 +33,20 @@ export default function ChatGroupContainer({ currentChat, socket }) {
         group: currentChat._id,
     });
     setMessages(response.data);
+
+    if(data._id == currentChat.userCreate){
+      setIsUserCreateGroup(true);
+    }else{
+      setIsUserCreateGroup(false);
+    }
+
+    const listUser = await axios.post(findListUserFromGroup, {
+      group: currentChat._id,
+    });
+    setListUsers(listUser.data);
+
+    console.log("list user %d",listUsers.length );
+    
   }, [currentChat]);
 
   useEffect(() => {
@@ -91,11 +109,6 @@ export default function ChatGroupContainer({ currentChat, socket }) {
     closePopup();
   }
 
-  const handlePopupConfirmLogout = () =>{
-    var popup = document.getElementById("popup-confirm-logout");
-    popup.classList.toggle("showPopupLogout"); 
-  }
-
   const leaveGroupChat = async() =>{
     console.log("leaveGroupChat");
     const data = await JSON.parse(
@@ -109,6 +122,11 @@ export default function ChatGroupContainer({ currentChat, socket }) {
 
   }
 
+  const handlePopupConfirmLogout = () =>{
+    var popup = document.getElementById("popup-confirm-logout");
+    popup.classList.toggle("showPopupLogout"); 
+  }
+
   const handleClick = async () => {
     const id = await JSON.parse(
       localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
@@ -119,6 +137,35 @@ export default function ChatGroupContainer({ currentChat, socket }) {
       navigate("/login");
     }
   };
+
+  const handlePopupConfirmDeleteGroup = () =>{
+    var popup = document.getElementById("popup-confirm-delete");
+    popup.classList.toggle("showPopupDelete"); 
+    closePopup();
+  }
+
+  const handleClickDelete = async() =>{
+    console.log("deleteGroupChat");
+    const { dataNew } = await axios.post(`${deleteGroup}/${currentChat._id}`);
+
+   window.location.reload();
+
+  }
+
+  const adminleaveGroupChat = async() =>{
+    console.log("adminLeaveGroupChat");
+    const data = await JSON.parse(
+      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+    );
+    const { dataNew } = await axios.post(`${adminleaveGroup}/${currentChat._id}`, {
+      userId: data._id,
+      userCreate: userCreateNew,
+    });
+
+   window.location.reload();
+
+  }
+
 
   return (
     <Container>
@@ -140,10 +187,13 @@ export default function ChatGroupContainer({ currentChat, socket }) {
                   <li class="li_leave_group" onClick={() => handlePopupConfirm()}>
                     <img  src={Leave} alt="Leave"/>
                     <a title="">Rời nhóm</a></li>
-                  <li>
+                  {
+                    isUserCreateGroup && ( <li class="li_delete_group" onClick={() => handlePopupConfirmDeleteGroup()}>
                     <img  src={Remove} alt="Remove"/>
                     <a title="" onclick="popupDoiMatKhau()">Xoá nhóm</a>
-                  </li>
+                  </li>) 
+                  }
+                 
               </ul>
           </div>
         </div>
@@ -190,33 +240,81 @@ export default function ChatGroupContainer({ currentChat, socket }) {
         })}
       </div>
       <ChatInput handleSendMsg={handleSendMsg} />
-      <div className="popupConfirmLeaveGroup" id="popup-leave-group">
-        <div className="headerPopupLeave">
-          <h4>Rời nhóm và xoá toàn bộ tin nhắn?</h4>
-          <div className="closePopupLeave" onClick={() => handlePopupConfirm()}>
-              <img
-                src={CloseIcon}
-                alt="CloseIcon"
-              />
-          </div>
-        </div>
-        <div className="bodyPopupLeave">
-            <div className="buttonCancelPopupLeave" onClick={() => leaveGroupChat()}>
-              <img
-                  src={ConfirmIcon}
-                  alt="ConfirmIcon"
-              />
-              <p>Xác nhận</p>
+       {/* POPUP LEAVE GROUP */}
+        
+      {
+        isUserCreateGroup ? 
+        ( 
+          <div className="popupConfirmAdminLeaveGroup" id="popup-leave-group">
+            <div className="headerPopupAdminLeave">
+                <h4>Rời nhóm và xoá toàn bộ tin nhắn?</h4>
+              <div className="closePopupLeave" onClick={() => handlePopupConfirm()}>
+                  <img
+                    src={CloseIcon}
+                    alt="CloseIcon"
+                  />
+              </div>
             </div>
-            <div className="buttonCofirmPopupLeave" onClick={() => handlePopupConfirm()}>
-            <img
-                src={CancelIcon}
-                alt="CancelIcon"
-              />
-              <p>Huỷ</p>
+            <div className="textHeaderPopupAdminLeave">
+              <img
+                  src={Warning}
+                  alt="Warning"
+                />
+              <h5>Hãy chọn trưởng nhóm khác trước khi rời nhóm!</h5>
+            </div>
+            <div className="listPopupAdminLeave">
+              <h4>Hãy chọn trưởng nhóm khác trước khi rời nhóm?</h4>
+            </div>
+            <div className="bodyPopupLeave">
+                <div className="buttonCancelPopupLeave" onClick={() => leaveGroupChat()}>
+                  <img
+                      src={ConfirmIcon}
+                      alt="ConfirmIcon"
+                  />
+                  <p>Xác nhận</p>
+                </div>
+                <div className="buttonCofirmPopupLeave" onClick={() => handlePopupConfirm()}>
+                <img
+                    src={CancelIcon}
+                    alt="CancelIcon"
+                  />
+                  <p>Huỷ</p>
+                </div>
             </div>
           </div>
-      </div>
+        ) 
+        :(
+          <div className="popupConfirmLeaveGroup" id="popup-leave-group">
+            <div className="headerPopupLeave">
+                <h4>Rời nhóm và xoá toàn bộ tin nhắn?</h4>
+                <div className="closePopupLeave" onClick={() => handlePopupConfirm()}>
+                    <img
+                      src={CloseIcon}
+                      alt="CloseIcon"
+                    />
+                </div>
+            </div>
+            <div className="bodyPopupLeave">
+              <div className="buttonCancelPopupLeave" onClick={() => leaveGroupChat()}>
+                <img
+                    src={ConfirmIcon}
+                    alt="ConfirmIcon"
+                />
+                <p>Xác nhận</p>
+              </div>
+              <div className="buttonCofirmPopupLeave" onClick={() => handlePopupConfirm()}>
+              <img
+                  src={CancelIcon}
+                  alt="CancelIcon"
+                />
+                <p>Huỷ</p>
+              </div>
+            </div>
+          </div>
+        )
+      }
+      
+      {/* POPUP LOGOUT */}
       <div className="popupConfirmLogout" id="popup-confirm-logout">
         <div className="headerPopupLogout">
           <h4>Bạn chắc chắn muốn đăng xuất?</h4>
@@ -236,6 +334,34 @@ export default function ChatGroupContainer({ currentChat, socket }) {
               <p>Xác nhận</p>
             </div>
             <div className="buttonCofirmPopupLogout" onClick={() => handlePopupConfirmLogout()}>
+            <img
+                src={CancelIcon}
+                alt="CancelIcon"
+              />
+              <p>Huỷ</p>
+            </div>
+          </div>
+      </div>
+      {/* POPUP DELETE GROUP */}
+      <div className="popupConfirmLogout" id="popup-confirm-delete">
+        <div className="headerPopupLogout">
+          <h4>Bạn chắc chắn muốn xoá nhóm?</h4>
+          <div className="closePopupLogout" onClick={() => handlePopupConfirmDeleteGroup()}>
+              <img
+                src={CloseIcon}
+                alt="CloseIcon"
+              />
+          </div>
+        </div>
+        <div className="bodyPopupLogout">
+            <div className="buttonCancelPopupLogout" onClick={() => handleClickDelete()}>
+              <img
+                  src={ConfirmIcon}
+                  alt="ConfirmIcon"
+              />
+              <p>Xác nhận</p>
+            </div>
+            <div className="buttonCofirmPopupLogout" onClick={() => handlePopupConfirmDeleteGroup()}>
             <img
                 src={CancelIcon}
                 alt="CancelIcon"
@@ -423,6 +549,58 @@ const Container = styled.div`
     padding:10px;
     visibility:hidden;
   }
+  .popupConfirmAdminLeaveGroup{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    width: 30%;
+    height:40%;
+    background-color: #ffffff;
+    position: absolute;
+    left:600px;
+    top: 200px;
+    padding:10px;
+    visibility:hidden;
+  }
+
+  .headerPopupAdminLeave{
+    width: 100%;
+    height:10%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    h4{
+      width: 100%;
+      align-items: center;
+      color: #0d0d30;
+    }
+    .closePopupLeave{
+      display: flex;
+      img{
+        justify-content: flex-end;
+      width: 2rem;
+      }
+    }
+  }
+  .textHeaderPopupAdminLeave{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height:12%;
+    h5{
+      color:red;
+    }
+    img{
+      width: 1.6rem;
+    }
+  }
+  .listPopupAdminLeave{
+    height:58%;
+  }
 
   .headerPopupLeave{
     width: 100%;
@@ -495,8 +673,8 @@ const Container = styled.div`
     height:15%;
     background-color: #ffffff;
     position: absolute;
-    left:600px;
-    top: 200px;
+    left:700px;
+    top: 250px;
     padding:10px;
     visibility:hidden;
   }
@@ -561,4 +739,10 @@ const Container = styled.div`
     -webkit-animation: fadeIn 1s;
     animation: fadeIn 1s;
   }
+  .showPopupDelete {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+  }
+  
 `;
