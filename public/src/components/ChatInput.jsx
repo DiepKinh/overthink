@@ -33,7 +33,7 @@ export default function ChatInput({ handleSendMsg }) {
           <BsEmojiSmileFill onClick={handleEmojiPickerhideShow} />
           {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
         </div>
-        <div className="image">
+        <div className="image" >
             <img
               src={Camera}
               alt="Camera"
