@@ -3,6 +3,7 @@ import { BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
 import styled from "styled-components";
 import Picker from "emoji-picker-react";
+import Camera from "../assets/Camera.png";
 
 export default function ChatInput({ handleSendMsg }) {
   const [msg, setMsg] = useState("");
@@ -32,6 +33,12 @@ export default function ChatInput({ handleSendMsg }) {
           <BsEmojiSmileFill onClick={handleEmojiPickerhideShow} />
           {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
         </div>
+        <div className="image">
+            <img
+              src={Camera}
+              alt="Camera"
+             />
+        </div>
       </div>
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
         <input
@@ -51,9 +58,10 @@ export default function ChatInput({ handleSendMsg }) {
 const Container = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 5% 95%;
+  grid-template-columns: 10% 88%;
   background-color: #080420;
   padding: 0 2rem;
+  justify-content:  space-around;
   @media screen and (min-width: 720px) and (max-width: 1080px) {
     padding: 0 1rem;
     gap: 1rem;
@@ -63,6 +71,7 @@ const Container = styled.div`
     align-items: center;
     color: white;
     gap: 1rem;
+    justify-content:  space-around;
     .emoji {
       position: relative;
       svg {
@@ -95,6 +104,11 @@ const Container = styled.div`
         .emoji-group:before {
           background-color: #080420;
         }
+      }
+    }
+    .image{
+      img{
+        width: 1.6rem;
       }
     }
   }
