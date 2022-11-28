@@ -39,6 +39,11 @@ export default function Contacts({ contactsGroup, contacts, changeChat, typeChat
     
   };
 
+  const changeType = (type) => {
+    typeChat(type);
+    
+  };
+
   const handlePopup = () => {
         var popup = document.getElementById("popup_info_group");
         popup.classList.toggle("show"); 
@@ -185,7 +190,9 @@ export default function Contacts({ contactsGroup, contacts, changeChat, typeChat
               );
             })}
           </div>
-          <div className="current-user">
+          <div className="current-user"
+             onClick={() => changeType("profile")}
+          >
             <div className="avatar">
               <img
                 src={`data:image/svg+xml;base64,${currentUserImage}`}
@@ -331,6 +338,7 @@ const Container = styled.div`
   }
 
   .current-user {
+    cursor: pointer;
     background-color: #0d0d30;
     display: flex;
     justify-content: center;

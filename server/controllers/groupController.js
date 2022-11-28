@@ -115,13 +115,33 @@ module.exports.findListUserFromGroup = async (req, res, next) => {
     }
     console.log('dataFind', dataFind.listUser);
     let list = new Array();
-    for (const i = 0; i <= array.length; i++) {
+    for (i = 0; i < array.length; i++) {
+      console.log('dsfas array[i]', array[i]);
       const dataFindUser = await User.findById(array[i]);
       if (dataFindUser) {
         list.push(dataFindUser);
       }
     }
     res.json(list);
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+module.exports.addTV = async (req, res, next) => {
+  const { listUser } = req.body;
+
+  try {
+    const data = await Groups.updateOne({
+      listUser: listUser,
+    });
+
+    if (data) return res.json({ msg: 'Added successfully.', status: true });
+    else
+      return res.json({
+        msg: 'Failed to add message to the database',
+        status: false,
+      });
   } catch (ex) {
     next(ex);
   }

@@ -6,7 +6,7 @@ import {Platform} from 'react-native';
 export const styles = new DynamicStyleSheet({
   container: {
     flex: 1,
-    backgroundColor: '#4A968D',
+    backgroundColor: 'white',
   },
   mainContainer: {
     paddingTop: Platform.OS === 'ios' ? 30 : 10,
@@ -18,11 +18,17 @@ export const styles = new DynamicStyleSheet({
     marginTop: 10,
     width: '90%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    height: 50,
   },
   viewTxtHeader: {
     width: '70%',
+  },
+  buttonBack: {
+    height: '100%',
+    width: 40,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   txtUserName: {
     color: 'white',
@@ -30,13 +36,13 @@ export const styles = new DynamicStyleSheet({
     fontWeight: '700',
   },
   txtWelcom: {
-    color: 'rgba(233, 229, 234, 0.6)',
-    fontSize: 14,
+    color: '#000000',
+    fontSize: 22,
+    fontWeight: '600',
   },
   imgBg: {},
   body: {
     marginTop: -15,
-    backgroundColor: 'white',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     justifyContent: 'center',
@@ -49,15 +55,17 @@ export const styles = new DynamicStyleSheet({
     width: '100%',
     borderRadius: pxToPercentage(30),
     paddingLeft: '3%',
-    height: pxToPercentage(50),
-    backgroundColor: '#F4F4F4',
+    height: pxToPercentage(42),
     color: 'black',
+    borderColor: '#E5E5E5',
+    borderWidth: 1,
   },
   txtInputSearch: {
     width: '85%',
     color: '#000',
     borderRadius: pxToPercentage(25),
-    fontSize: 16,
+    fontSize: 14,
+    marginLeft: 10,
   },
   titleDoctor: {
     width: '90%',
@@ -71,26 +79,29 @@ export const styles = new DynamicStyleSheet({
     marginRight: 20,
   },
   textCategory: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 16,
+    fontWeight: '500',
     color: 'black',
+    marginLeft: 10,
   },
 
   // Doctor Item
   itemContainer: {
-    width: 200,
-    height: 250,
+    width: '100%',
+    height: 70,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 20,
+    // marginRight: 20,
   },
   viewImgDoctor: {
-    width: '85%',
-    height: '60%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    width: '100%',
+    height: '90%',
     alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  imgItem: {
+    width: 50,
+    height: 50,
   },
   imgDoctor: {
     width: '100%',
@@ -162,6 +173,7 @@ export const styles = new DynamicStyleSheet({
 
   //Menu Footer
   menuFooter: {
+    paddingBottom: 12,
     height: 60,
     width: '100%',
     flexDirection: 'row',
@@ -180,11 +192,10 @@ export const styles = new DynamicStyleSheet({
   },
   itemMenuFooterChoose: {
     height: 40,
-    width: 100,
+    width: 60,
     backgroundColor: '#F5F5F5',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(7, 140, 128, 0.9)',
+    borderBottomWidth: 3,
+    borderBottomColor: 'rgba(7, 140, 128, 0.9)',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -196,15 +207,15 @@ export const styles = new DynamicStyleSheet({
   },
   itemMenuFooter: {
     height: 40,
-    width: 100,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(168, 167, 167, 0.3)',
+    width: 60,
     alignItems: 'center',
     justifyContent: 'center',
   },
   imgMenuFooter: {
-    height: 30,
-    width: 30,
+    height: 20,
+    width: 20,
+  },
+  imgMenuFooter2: {
+    height: 20,
   },
 });

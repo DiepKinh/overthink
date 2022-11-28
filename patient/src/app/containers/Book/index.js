@@ -13,7 +13,7 @@ import DropdownAlert from 'react-native-dropdownalert';
 import Feather from 'react-native-vector-icons/Feather';
 import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
 import {ActionCreators} from '@actions';
@@ -130,15 +130,27 @@ const Book = props => {
   };
   console.log('====updatelichkhamReducer====', updatelichkhamReducer);
 
-  const listGio = [
-    '7h - 9h',
-    '9h - 11h',
-    '11h - 13h',
-    '13h - 15h',
-    '15h - 17h',
-    '17h - 19h',
-    '19h - 21h',
-    '21h - 23h',
+  const messages = [
+    {
+      id: 1,
+      message: 'Are you still travelling?',
+      fromSelf: false,
+    },
+    {
+      id: 2,
+      message: 'Yes, i’m at Istanbul.. ',
+      fromSelf: true,
+    },
+    {
+      id: 3,
+      message: 'OoOo, Thats so Cool! ',
+      fromSelf: false,
+    },
+    {
+      id: 4,
+      message: 'Raining??',
+      fromSelf: false,
+    },
   ];
   const renderStar = doctor => {
     let listStar = [];
@@ -154,189 +166,91 @@ const Book = props => {
     return listStar;
   };
   return (
-    <KeyboardAwareScrollView enableResetScrollToCoords style={styles.container}>
-      <TouchableOpacity
-        style={styles.iconBack}
-        onPress={() => navigation.goBack()}>
-        <Ionicons
-          name="chevron-back"
-          color={'rgba(7, 140, 128, 0.9)'}
-          size={30}
-        />
-      </TouchableOpacity>
-      <View style={styles.mainContainer}>
-        <View style={{width: '90%'}}>
-          <View style={styles.viewAvatar}>
-            {doctorCurrent.anh != undefined && doctorCurrent.anh != '' ? (
+    <>
+      <KeyboardAwareScrollView
+        enableResetScrollToCoords
+        style={styles.container}>
+        <View style={styles.mainContainerHeader}>
+          <View style={styles.headerContainer}>
+            <View style={styles.headerContainerLeft}>
+              <TouchableOpacity
+                style={styles.buttonBack}
+                onPress={() => navigation.navigate('HomeScreen')}>
+                <AntDesign name="arrowleft" size={22} color={'#000000'} />
+              </TouchableOpacity>
               <Image
-                source={{uri: doctorCurrent.anh}}
-                style={styles.imgDoctor}
+                style={styles.imgItem}
+                source={require('../../../../assets/logo/AnhDefault.webp')}
               />
-            ) : (
-              <Image
-                source={require('../../../../assets/background/avatarDefault.png')}
-                style={styles.imgDoctor}
-              />
-            )}
-          </View>
-          <View style={styles.viewInfo}>
-            <Text style={styles.txtName}>{doctorCurrent.hoten}</Text>
-            <Text style={styles.txtAcademic}>{doctorCurrent.hochamhocvi}</Text>
-            <Text style={styles.startRating}>{renderStar(doctorCurrent)}</Text>
-            <View style={styles.viewSubInfo}>
-              <View style={styles.viewSubInfoTop}>
-                {/* <View style={{alignItems: 'center'}}>
-                  <Text style={styles.titleSub}>Bệnh nhân</Text>
-                  <Text style={styles.valueTitleSub}>
-                    {doctorCurrent.sobenhnhan}
-                  </Text>
-                </View> */}
-
-                <View style={{alignItems: 'center'}}>
-                  <Text style={styles.titleSub}>Kinh nghiệm</Text>
-                  <Text style={styles.valueTitleSub}>
-                    {doctorCurrent.kinhnghiem}
-                  </Text>
-                </View>
-                <View style={{alignItems: 'center'}}>
-                  <Text style={styles.titleSub}>Chuyên khoa</Text>
-                  <Text style={styles.valueTitleSub}>
-                    {doctorCurrent.chuyenkhoa}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.viewSubInfoTop}>
-                <View style={{alignItems: 'center'}}>
-                  <Text style={styles.titleSub}>Chức vụ</Text>
-                  <Text style={styles.valueTitleSub}>
-                    {doctorCurrent.chucvu}
-                  </Text>
-                </View>
-                <View style={{alignItems: 'center'}}>
-                  <Text style={styles.titleSub}>Bệnh viện công tác</Text>
-                  <Text style={styles.valueTitleSub}>
-                    {doctorCurrent.benhviencongtac}
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.viewSubInfoBot}>
-                <Text style={styles.txtTitleAbout}>Địa chỉ phòng khám:</Text>
-                <Text style={styles.txtValueAbout}>
-                  {doctorCurrent.diachiphongkham}
-                </Text>
-              </View>
-              <View style={styles.viewSubInfoBot}>
-                <Text style={styles.txtTitleAbout}>Giới thiệu:</Text>
-                <Text style={styles.txtValueAbout}>
-                  {doctorCurrent.gioithieu}
-                </Text>
+              <View style={styles.viewNameChat}>
+                <Text style={styles.txtWelcom}>phuong123</Text>
+                <Image
+                  style={styles.imgActive}
+                  source={require('../../../../assets/logo/Active.png')}
+                />
               </View>
             </View>
-            <DropdownAlert ref={dropdownAlertRef} updateStatusBar={false} />
+
+            <Image
+              style={styles.imgCall}
+              source={require('../../../../assets/logo/Call.png')}
+            />
+            <Image
+              style={styles.imgVideo}
+              source={require('../../../../assets/logo/Video.png')}
+            />
           </View>
         </View>
+        <View style={styles.mainContainer}>
+          {messages.map(message => {
+            return (
+              <View>
+                <View
+                  className={`message ${
+                    message.fromSelf ? 'sended' : 'recieved'
+                  }`}>
+                  {message.fromSelf ? (
+                    <View style={styles.messageSend}>
+                      <View style={styles.messageSendDetail}>
+                        <Text style={styles.txtMessageSend}>
+                          {message.message}
+                        </Text>
+                      </View>
+                    </View>
+                  ) : (
+                    <View style={styles.messageRecieved}>
+                      <View style={styles.messageRecievedDetail}>
+                        <Text style={styles.txtMessageRecieved}>
+                          {message.message}
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                </View>
+              </View>
+            );
+          })}
+        </View>
+      </KeyboardAwareScrollView>
+      <View style={styles.menuFooter}>
+        <View style={styles.viewSearch}>
+          <TextInput
+            placeholderTextColor={'rgba(168, 167, 167, 0.7)'}
+            style={styles.txtInputSearch}
+            placeholder="Send Message"
+            autoCapitalize="none"
+          />
+          <TouchableOpacity
+            style={styles.buttonBack}
+            onPress={() => navigation.navigate('LoginScreen')}>
+            <Image
+              style={styles.imgVideo}
+              source={require('../../../../assets/logo/Send.png')}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-
-      <Text style={styles.titleDatLich}>Đặt lịch</Text>
-      {/* <CalendarStrip
-        datesBlacklist={datesBlacklistFunc}
-        style={{height: 150, paddingTop: 20, paddingBottom: 10}}
-      /> */}
-      <CalendarStrip
-        scrollable
-        style={{height: 120, paddingTop: 20, paddingBottom: 10}}
-        calendarColor={'rgba(7, 140, 128, 0.9)'}
-        calendarHeaderStyle={{color: 'white'}}
-        dateNumberStyle={{color: 'white'}}
-        dateNameStyle={{color: 'white'}}
-        iconContainer={{flex: 0.1}}
-        onDateSelected={date => {
-          setNgay(date);
-          var doctor = {...doctorCurrent};
-          dispatch(
-            ActionCreators.getLichKhamTheoNgay(
-              doctor,
-              date,
-              // moment(date).format('YYYY-MM-DD'),
-            ),
-          );
-        }}
-      />
-      <FlatGrid
-        itemDimension={100}
-        data={listGio}
-        fixed={true}
-        keyExtractor={(item, index) => item}
-        renderItem={item =>
-          searchItem(item.item) ? (
-            <TouchableOpacity
-              onPress={() => {
-                setGio(item.item);
-                var doctor = {...doctorCurrent};
-                console.log('doctorCurrent.mabacsi', ngay);
-                console.log('doctorCurrent.mabacsi item.item', item.item);
-
-                dispatch(
-                  ActionCreators.getLichKhamTheoNgayGio(
-                    doctor,
-                    ngay,
-                    String(item.item),
-                  ),
-                );
-              }}
-              style={[
-                styles.viewBtnNumberUser,
-
-                gio &&
-                  item.item === gio && {
-                    backgroundColor: 'rgba(7, 140, 128, 0.9)',
-                    borderWidth: 0,
-                  },
-              ]}>
-              <Text
-                style={[
-                  styles.txtNumberUser,
-                  gio &&
-                    item.item === gio && {
-                      color: 'white',
-                    },
-                ]}>
-                {item.item}
-              </Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              disabled
-              style={[
-                styles.viewBtnNumberUser,
-                {
-                  backgroundColor: '#E5E5E5',
-                  borderWidth: 0.1,
-                },
-              ]}>
-              <Text
-                style={[
-                  styles.txtNumberUser,
-                  {
-                    color: '#A5A5A5',
-                  },
-                ]}>
-                {item.item}
-              </Text>
-            </TouchableOpacity>
-          )
-        }
-      />
-
-      <View style={styles.viewBook}>
-        <TouchableOpacity
-          style={styles.btnBook}
-          onPress={() => handleDangKy()}
-          disabled={loginReducer.requesting}>
-          <Text style={styles.lbBook}>Đặt lịch hẹn</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAwareScrollView>
+    </>
   );
 };
 

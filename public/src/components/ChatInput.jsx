@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Picker from "emoji-picker-react";
 import Camera from "../assets/Camera.png";
 
-export default function ChatInput({ handleSendMsg }) {
+export default function ChatInput({ handleSendMsg, setImage }) {
   const [msg, setMsg] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const handleEmojiPickerhideShow = () => {
@@ -26,6 +26,13 @@ export default function ChatInput({ handleSendMsg }) {
     }
   };
 
+  const handleUpload = (event) => {
+    const file = event.target.files[0];
+    setImage(URL.createObjectURL(event.target.files[0]));
+    console.log(file);
+  };
+  
+
   return (
     <Container>
       <div className="button-container">
@@ -34,11 +41,12 @@ export default function ChatInput({ handleSendMsg }) {
           {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
         </div>
         <div className="image" >
-            <img
-              src={Camera}
-              alt="Camera"
-             />
+             <input required style={{ display: "none" }} type="file" id="file" onChange={handleUpload}/>
+              <label htmlFor="file">
+                <img src={Camera} alt="" />
+              </label>
         </div>
+        
       </div>
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
         <input
@@ -154,5 +162,8 @@ const Container = styled.div`
         color: white;
       }
     }
+  }
+  #sendImages{
+    background-color: #bfb;
   }
 `;

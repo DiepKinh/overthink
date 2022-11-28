@@ -8,6 +8,7 @@ import ChatContainer from "../components/ChatContainer";
 import ChatGroupContainer from "../components/ChatGroupContainer";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
+import Profile from "../components/Profile";
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -81,8 +82,9 @@ export default function Chat() {
           {currentChat === undefined ? (
             <Welcome />
           ) : (
-            currentTypeChat === "group" ? (<ChatGroupContainer currentChat={currentChat} socket={socket} />)
-            :(<ChatContainer currentChat={currentChat} socket={socket} />)
+            currentTypeChat === "group" ? (<ChatGroupContainer currentChat={currentChat} socket={socket} contacts={contacts}/>)
+            :(currentTypeChat === "profile" ? <Profile/> 
+            :<ChatContainer currentChat={currentChat} socket={socket} />)
 
           )}
         </div>

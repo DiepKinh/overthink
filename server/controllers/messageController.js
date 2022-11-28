@@ -1,5 +1,6 @@
 const Messages = require('../models/messageModel');
 const Messagesgroup = require('../models/messageGroupModel');
+const User = require('../models/userModel');
 
 module.exports.getMessages = async (req, res, next) => {
   try {
@@ -71,6 +72,28 @@ module.exports.addMessageGroup = async (req, res, next) => {
 
     if (data) return res.json({ msg: 'Message added successfully.' });
     else return res.json({ msg: 'Failed to add message to the database' });
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+module.exports.getListAdd = async (req, res, next) => {
+  try {
+    const { usersend, group } = req.body;
+    const messages = await Messagesgroup.find({
+      group: {
+        $all: group,
+      },
+    }).sort({ updatedAt: 1 });
+
+    const projectedMessages = messages.map(msg => {
+      return {
+        fromSelf: msg.usersend.toString() === usersend,
+        message: msg.message.text,
+        avatarImage: msg.avatarImage,
+      };
+    });
+    res.json(projectedMessages);
   } catch (ex) {
     next(ex);
   }

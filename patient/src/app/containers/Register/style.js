@@ -76,7 +76,7 @@ export const styles = new DynamicStyleSheet({
     paddingLeft: '3%',
     height: pxToPercentage(47),
     backgroundColor: '#F1FAF5',
-    borderColor: 'rgba(7, 140, 128, 0.9)',
+    borderColor: '#4E0EFF',
     borderWidth: 1,
     color: 'black',
   },
@@ -91,7 +91,7 @@ export const styles = new DynamicStyleSheet({
   },
   btnLogin: {
     marginVertical: pxToPercentage(10),
-    backgroundColor: 'rgba(7, 140, 128, 0.9)',
+    backgroundColor: '#4E0EFF',
     alignItems: 'center',
     borderRadius: pxToPercentage(10),
     height: pxToPercentage(47),

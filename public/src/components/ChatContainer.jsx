@@ -15,6 +15,7 @@ import { BiPowerOff } from "react-icons/bi";
 
 export default function ChatContainer({ currentChat, socket }) {
   const navigate = useNavigate();
+  const [msg, setMsg] = useState("");
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
   const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -59,6 +60,10 @@ export default function ChatContainer({ currentChat, socket }) {
     const msgs = [...messages];
     msgs.push({ fromSelf: true, message: msg });
     setMessages(msgs);
+  };
+
+  const handleSetImage = async (msg) => {
+    setMsg(msg);
   };
 
   useEffect(() => {
@@ -128,8 +133,12 @@ export default function ChatContainer({ currentChat, socket }) {
             </div>
           );
         })}
+          <div className="message sended">
+            <img src={msg} alt="" />
+          </div>
+        
       </div>
-      <ChatInput handleSendMsg={handleSendMsg} />
+      <ChatInput handleSendMsg={handleSendMsg} setImage = {handleSetImage}/>
       <div className="popupConfirmLogout" id="popup-confirm-logout">
         <div className="headerPopupLogout">
           <h4>Bạn chắc chắn muốn đăng xuất?</h4>
@@ -223,6 +232,9 @@ const Container = styled.div`
       justify-content: flex-end;
       .content {
         background-color: #4f04ff21;
+      }
+      img{
+        width: 200px;
       }
     }
     .recieved {

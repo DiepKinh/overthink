@@ -23,11 +23,11 @@ const Users = new Schema(
 Users.pre('save', function (next) {
   let user = this;
 
-  bcrypt.hash(user.matkhau, 10, function (error, hash) {
+  bcrypt.hash(user.password, 10, function (error, hash) {
     if (error) {
       return next(error);
     } else {
-      user.matkhau = hash;
+      user.password = hash;
       next();
     }
   });

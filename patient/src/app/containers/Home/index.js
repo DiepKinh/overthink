@@ -15,6 +15,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
@@ -29,75 +30,18 @@ const listCategory = ['ADIDAS', 'MEN', 'NIKE', 'VANS CONVERSE', 'WOMEN'];
 const doctors = [
   {
     id: 1,
-    name: 'Lê Ngọc Ánh',
-    academic_title: 'Thạc Sĩ, Bác Sĩ',
-    position: 'Trưởng khoa Nhi Bênh Viện Nhi Đồng',
-    category: 'ADIDAS',
-    price: 350,
-    patients: 100,
-    experience: ' 5 năm',
-    rating: 5.0,
-    description:
-      'The adidas Primeknit upper wraps the foot with a supportive fit that enhances movement.\r\n\r\n',
-    calender: [
-      {'15/03/2022': ['7h - 9h', '9h - 11h']},
-      {'16/03/2022': ['7h - 9h', '9h - 11h']},
-      {'17/03/2022': ['13h - 15h', '15h - 17h']},
-      {'18/03/2022': ['7h - 9h', '9h - 11h']},
-      {'19/03/2022': ['7h - 9h', '9h - 11h']},
-      {'20/03/2022': ['7h - 9h', '9h - 11h', '15h - 17h']},
-      {'21/03/2022': ['13h - 15h', '15h - 17h']},
-    ],
-    image:
-      'https://taimuihongsg.com/wp-content/uploads/2018/05/Le-Thi-Bich-Thoa-01.jpg',
+    name: 'phuong123',
+    image: 'Anh3',
   },
   {
     id: 2,
-    name: 'Trần Minh Tuấn',
-    academic_title: 'Thạc Sĩ, Bác Sĩ',
-    position: 'Trưởng khoa Nhi Bênh Viện Nhi Đồng',
-    category: 'ADIDAS',
-    price: 350,
-    patients: 100,
-    experience: ' 5 năm',
-    rating: 4.2,
-    description:
-      'The adidas Primeknit upper wraps the foot with a supportive fit that enhances movement.\r\n\r\n',
-    calender: [
-      {'15/03/2022': ['7h - 9h', '9h - 11h']},
-      {'16/03/2022': ['7h - 9h', '9h - 11h']},
-      {'17/03/2022': ['13h - 15h', '15h - 17h']},
-      {'18/03/2022': ['7h - 9h', '9h - 11h']},
-      {'19/03/2022': ['7h - 9h', '9h - 11h']},
-      {'20/03/2022': ['7h - 9h', '9h - 11h', '15h - 17h']},
-      {'21/03/2022': ['13h - 15h', '15h - 17h']},
-    ],
-    image:
-      'https://taimuihongsg.com/wp-content/uploads/2019/01/Trinh-Tan-Lap-01.jpg',
+    name: 'hieu123',
+    image: 'Anh2',
   },
   {
     id: 3,
-    name: 'Nguyễn Thanh Tú',
-    academic_title: 'Thạc Sĩ, Bác Sĩ',
-    position: 'Trưởng khoa Nhi Bênh Viện Nhi Đồng',
-    category: 'ADIDAS',
-    price: 350,
-    patients: 100,
-    experience: ' 5 năm',
-    rating: 4.0,
-    description:
-      'The adidas Primeknit upper wraps the foot with a supportive fit that enhances movement.\r\n\r\n',
-    calender: [
-      {'15/03/2022': ['7h - 9h', '9h - 11h']},
-      {'16/03/2022': ['7h - 9h', '9h - 11h']},
-      {'17/03/2022': ['13h - 15h', '15h - 17h']},
-      {'18/03/2022': ['7h - 9h', '9h - 11h']},
-      {'19/03/2022': ['7h - 9h', '9h - 11h']},
-      {'20/03/2022': ['7h - 9h', '9h - 11h', '15h - 17h']},
-      {'21/03/2022': ['13h - 15h', '15h - 17h']},
-    ],
-    image:
-      'https://taimuihongsg.com/wp-content/uploads/2018/05/Kim-Bun-ThuongE-01.jpg',
+    name: 'khoa123',
+    image: 'Anh1',
   },
 ];
 
@@ -134,19 +78,6 @@ const Home = props => {
     dispatch(getAllChuyenKhoa());
   };
 
-  const renderStar = doctor => {
-    let listStar = [];
-    for (let index = 1; index <= 5; index++) {
-      const color = Math.round(doctor.danhgia) >= index ? '#EFB110' : '#989692';
-      listStar.push(
-        <View style={styles.star}>
-          <Foundation key={doctor.index} name="star" size={16} color={color} />
-          <Text style={{width: 10}}> </Text>
-        </View>,
-      );
-    }
-    return listStar;
-  };
   const DoctorItem = doctor => {
     return (
       <TouchableOpacity
@@ -154,142 +85,85 @@ const Home = props => {
         onPress={() => navigation.navigate('BookScreen', {doctor: doctor})}>
         {doctor.anh != undefined && doctor.anh != '' ? (
           <View style={[styles.viewImgDoctor, {backgroundColor: '#E5E5E5'}]}>
-            <Image source={{uri: doctor.anh}} style={styles.imgDoctor} />
+            <Image
+              style={styles.imgItem}
+              source={require('../../../../assets/logo/Anh1.png')}
+            />
+            <Text style={styles.textCategory}>{doctor.name} </Text>
           </View>
         ) : (
-          <View style={[styles.viewImgDoctor, {backgroundColor: '#E5E5E5'}]}>
+          <View style={[styles.viewImgDoctor]}>
             <Image
-              source={require('../../../../assets/background/avatarDefault.png')}
+              style={styles.imgItem}
+              source={require('../../../../assets/logo/Anh1.png')}
             />
+            <Text style={styles.textCategory}>{doctor.name} </Text>
           </View>
         )}
-        <View style={styles.viewInfoDoctor}>
-          <Text style={styles.txtItemName}>{doctor.hoten}</Text>
-          <Text style={styles.txtAcademic}>{doctor.hochamhocvi}</Text>
-          <Text style={styles.startRating}> {renderStar(doctor)}</Text>
-        </View>
       </TouchableOpacity>
     );
   };
-
-  const clickChuyenKHoa = chuyenkhoa => {
-    const {getBacSiTheoChuyenKhoa} = ActionCreators;
-    dispatch(getBacSiTheoChuyenKhoa(chuyenkhoa));
-    const bacSiChuyenKhoa = bacsichuyenkhoaReducers.result;
-    console.log('bacSiChuyenKhoa', bacSiChuyenKhoa);
-    setListBacSi(bacSiChuyenKhoa);
-  };
   return (
     <>
-      <KeyboardAwareScrollView
-        enableResetScrollToCoords
-        style={styles.container}>
+      <View enableResetScrollToCoords style={styles.container}>
         <View style={styles.mainContainer}>
           <View style={styles.headerContainer}>
-            <View style={styles.viewTxtHeader}>
-              <Text style={styles.txtUserName}>
-                Xin chào, {userLogin.data.hoten}
-              </Text>
-              <Text style={styles.txtWelcom}>
-                Hãy kiểm tra lịch khám của bạn đã được xác nhận chưa nhé!
-              </Text>
-            </View>
-            <Image
-              source={require('../../../../assets/background/imgHeaderHome.png')}
-              style={styles.imgBg}
-            />
+            <TouchableOpacity
+              style={styles.buttonBack}
+              onPress={() => navigation.navigate('LoginScreen')}>
+              <AntDesign name="arrowleft" size={22} color={'#000000'} />
+            </TouchableOpacity>
+
+            <Text style={styles.txtWelcom}>Chat</Text>
           </View>
         </View>
         <View style={styles.body}>
           <View style={{width: '90%'}}>
             <View style={styles.viewSearch}>
-              <Feather name="search" size={28} color={'#888E9A'} />
+              <Feather name="search" size={22} color={'#888E9A'} />
               <TextInput
                 placeholderTextColor={'rgba(168, 167, 167, 0.7)'}
                 style={styles.txtInputSearch}
-                // value={password}
-                placeholder="Tìm kiếm Bác Sĩ..."
-                // onChangeText={text => setPassword(text)}
+                placeholder="Search here..."
                 autoCapitalize="none"
-                // secureTextEntry={!isShowPass}
-                // onFocus={() => setFocusPassword(true)}s
               />
             </View>
-            <Text style={styles.titleDoctor}>Bác Sĩ</Text>
             <FlatList
-              data={allChuyenKhoa}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({item}) => (
-                <TouchableOpacity
-                  style={styles.btnCategory}
-                  onPress={() => clickChuyenKHoa(item)}>
-                  <Text style={styles.textCategory}>{item.tenchuyenkhoa}</Text>
-                </TouchableOpacity>
-              )}
-              // ItemSeparatorComponent={() => <View style={{height: 70}} />}
-              // contentContainerStyle={{paddingBottom: 100}}
-            />
-            <FlatList
+              keyExtractor={(item, index) => item.id + index.toString()}
               style={{marginTop: 20}}
-              data={listBacSi}
-              horizontal
-              showsHorizontalScrollIndicator={false}
+              data={doctors}
+              showsVerticalScrollIndicator={false}
               renderItem={({item}) => DoctorItem(item)}
+              scrollEnabled={false}
             />
-            <View style={styles.advertisement}>
-              <View style={styles.viewAdvertisementTitle}>
-                <View style={styles.infoAdvertisement}>
-                  <MaterialIcons
-                    name="info-outline"
-                    size={28}
-                    color={'rgba(7, 140, 128, 0.9)'}
-                  />
-                </View>
-                <View>
-                  <Text style={styles.txtTitleAdvertisement}>
-                    About Health Doctor
-                  </Text>
-                  <Text style={styles.txtSubAdvertisement}>
-                    Education about Health Doctor
-                  </Text>
-                </View>
-              </View>
-              <TouchableOpacity>
-                <Image
-                  source={require('../../../../assets/background/imgAdvertisement.png')}
-                  style={styles.imgAdvertisement}
-                />
-              </TouchableOpacity>
-            </View>
           </View>
         </View>
-      </KeyboardAwareScrollView>
+      </View>
       <View style={styles.menuFooter}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('HomeScreen')}
-          style={styles.itemMenuFooterChoose}>
+        <TouchableOpacity style={styles.itemMenuFooter}>
           <Image
-            source={require('../../../../assets/icons/home_choose.png')}
+            source={require('../../../../assets/logo/Menu1.png')}
             style={styles.imgMenuFooter}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ListScreen')}
-          style={styles.itemMenuFooter}>
-          <FontAwesome5
-            name="clipboard-list"
-            size={28}
-            color={'rgba(168, 167, 167, 0.5)'}
+          style={styles.itemMenuFooterChoose}
+          onPress={() => navigation.navigate('HomeScreen')}>
+          <Image
+            source={require('../../../../assets/logo/Menu2.png')}
+            style={styles.imgMenuFooter2}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('UserScreen')}
-          style={styles.itemMenuFooter}>
-          <FontAwesome
-            name="user-circle-o"
-            size={28}
-            color={'rgba(168, 167, 167, 0.5)'}
+        <TouchableOpacity style={styles.itemMenuFooter}>
+          <Image
+            source={require('../../../../assets/logo/Menu3.png')}
+            style={styles.imgMenuFooter}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.itemMenuFooter}>
+          <Image
+            source={require('../../../../assets/logo/Menu4.png')}
+            style={styles.imgMenuFooter}
           />
         </TouchableOpacity>
       </View>

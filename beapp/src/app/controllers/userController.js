@@ -15,16 +15,16 @@ class UserController {
 
   // [GET] /benhnhan
   login(req, res) {
-    User.findOne(
+    Users.findOne(
       // { sodienthoai: req.body.sodienthoai, matkhau: req.body.matkhau },
-      { username: req.body.username },
+      { username: req.body.username, password: req.body.password },
 
       function (err, user) {
         if (!err) {
           if (user == null) {
             res.send({
               success: false,
-              message: 'Số điện thoại không đúng!',
+              message: 'Tên đăng nhập không đúng!',
             });
           } else {
             if (bcrypt.compareSync(req.body.password, user.password)) {

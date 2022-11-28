@@ -7,6 +7,9 @@ export const login = params => {
     dispatch({type: ActionTypes.USER_LOGIN_REQUEST});
     const {username, password} = params;
 
+    console.log('pram username', username);
+    console.log('pram password', password);
+
     if (password.length === 0) {
       return dispatch({
         type: ActionTypes.USER_LOGIN_FAIL,

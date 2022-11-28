@@ -101,7 +101,7 @@ const Register = props => {
   };
 
   const onConfirm = text => {
-    if (text.length > 5) {
+    if (text.length > 7) {
       setLenghtPass(true);
     } else {
       setLenghtPass(false);
@@ -176,7 +176,7 @@ const Register = props => {
             Chào mừng bạn đến với
           </Text>
           <Text style={[styles.textWelcome, {fontWeight: '700', fontSize: 35}]}>
-            Doctor Health
+            Overthink
           </Text>
         </View>
         <View style={styles.body}>
@@ -187,10 +187,10 @@ const Register = props => {
             </Text>
           </View>
           <View style={styles.viewContainerInput}>
-            <Text style={styles.txtLable}>Họ và Tên</Text>
+            <Text style={styles.txtLable}>Tên đăng nhập</Text>
             {userLenght === false && (
               <Text style={styles.txtLableError}>
-                Họ tên không được bỏ trống
+                Tên đăng nhập không được bỏ trống
               </Text>
             )}
             <View
@@ -209,10 +209,10 @@ const Register = props => {
             </View>
           </View>
           <View style={styles.viewContainerInput}>
-            <Text style={styles.txtLable}>Số điện thoại</Text>
+            <Text style={styles.txtLable}>Nhập email</Text>
             {numberLenght === false && (
               <Text style={styles.txtLableError}>
-                Số điện thoại không được bỏ trống
+                Email không được bỏ trống
               </Text>
             )}
             <View
@@ -220,7 +220,7 @@ const Register = props => {
               <TextInput
                 placeholderTextColor={'rgba(168, 167, 167, 0.7)'}
                 style={styles.txtInput}
-                placeholder="Nhập số điện thoại của bạn"
+                placeholder="Nhập email của bạn"
                 value={email}
                 onChangeText={text => setEmail(text)}
                 autoCapitalize="none"
@@ -234,7 +234,7 @@ const Register = props => {
               // (password.length > 1 && password.length < 6) ||
               lengthPass === false && (
                 <Text style={styles.txtLableError}>
-                  Mật khẩu phải sử dụng 6 ký tự trở lên
+                  Mật khẩu phải sử dụng 8 ký tự trở lên
                 </Text>
               )
             }
@@ -324,7 +324,7 @@ const Register = props => {
             <Text
               style={[
                 styles.txtRegister,
-                {color: '#5DC9BF', fontWeight: '700'},
+                {color: '#4E0EFF', fontWeight: '700'},
               ]}>
               Đăng nhập ngay
             </Text>

@@ -4,7 +4,7 @@ import ChatInput from "./ChatInput";
 import Logout from "./Logout";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
-import {addMessageGroup ,getMessageGroup, leaveGroup,logoutRoute,deleteGroup, adminleaveGroup ,findListUserFromGroup} from "../utils/APIRoutes";
+import {addMessageGroup ,addTV,getListAdd,getMessageGroup, leaveGroup,logoutRoute,deleteGroup, adminleaveGroup ,findListUserFromGroup} from "../utils/APIRoutes";
 import AvatarGroupChat from "../assets/avatarGroupChat.webp";
 import CloseIcon from "../assets/CloseIcon.png";
 import Leave from "../assets/leave.png";
@@ -12,10 +12,12 @@ import Remove from "../assets/remove.png";
 import ConfirmIcon from "../assets/confirm.png";
 import CancelIcon from "../assets/CancelIcon.png";
 import Warning from "../assets/warning.png";
+import AddIcon from "../assets/AddIcon.png";
+import RemovUser from "../assets/RemovUser.png";
 import { useNavigate, Link } from "react-router-dom";
 import { BiPowerOff } from "react-icons/bi";
 
-export default function ChatGroupContainer({ currentChat, socket }) {
+export default function ChatGroupContainer({ currentChat, socket, contacts }) {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
@@ -23,6 +25,19 @@ export default function ChatGroupContainer({ currentChat, socket }) {
   const [isUserCreateGroup, setIsUserCreateGroup] = useState(false);
   const [userCreateNew, setUserCreateNew] = useState(null);
   const [listUsers, setListUsers] = useState([]);
+  const [msg, setMsg] = useState("");
+  // const [contacts, setContacts] = useState([]);
+  const [currentSelected, setCurrentSelected] = useState(undefined);
+  const [currentUserId, setCurrentUserId] = useState(undefined);
+  const [values, setValues] = useState({
+    listUser: new Set(),
+  });
+  useEffect(async () => {
+    const data = await JSON.parse(
+      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+    );
+    setCurrentUserId(data._id);
+  }, []);
 
   useEffect(async () => {
     const data = await JSON.parse(
@@ -44,9 +59,15 @@ export default function ChatGroupContainer({ currentChat, socket }) {
       group: currentChat._id,
     });
     setListUsers(listUser.data);
+    
 
     console.log("list user %d",listUsers.length );
     
+    const listUserAdd = await axios.post(getListAdd, {
+      group: currentChat._id,
+  });
+  setMessages(listUserAdd.data);
+
   }, [currentChat]);
 
   useEffect(() => {
@@ -80,6 +101,9 @@ export default function ChatGroupContainer({ currentChat, socket }) {
     const msgs = [...messages];
     msgs.push({ fromSelf: true, message: msg ,avatarImage:data.avatarImage});
     setMessages(msgs);
+  };
+  const handleSetImage = async (msg) => {
+    setMsg(msg);
   };
 
   useEffect(() => {
@@ -144,6 +168,12 @@ export default function ChatGroupContainer({ currentChat, socket }) {
     closePopup();
   }
 
+  const handlePopupAddTV = () =>{
+    var popup = document.getElementById("popup-confirm-add");
+    popup.classList.toggle("showPopupAdd"); 
+    closePopup();
+  }
+
   const handleClickDelete = async() =>{
     console.log("deleteGroupChat");
     const { dataNew } = await axios.post(`${deleteGroup}/${currentChat._id}`);
@@ -167,6 +197,41 @@ export default function ChatGroupContainer({ currentChat, socket }) {
   }
 
 
+  const handleAddListUser = (id) => {
+    const { listUser } = values;
+    let listUserChecked = new Set();
+    listUserChecked =listUser;
+
+    if(listUserChecked.has(id)){
+      listUserChecked.delete(id);
+    }else{
+      listUserChecked.add(id);
+    }
+    setValues({ ...values, listUser:listUserChecked });
+  };
+
+  const handleClickAdd = async (event) => {
+    const { listUser } = values;
+    event.preventDefault();
+    let arr = new Array();
+
+    for (const value of listUser) {
+      arr.push(value);
+    }
+    arr.push(currentUserId);
+    
+    if (handleClickAdd()) {
+      const { data } = await axios.post(addTV, {
+        listUser:arr,
+      });
+      if (data.status === true) {
+        navigate("/");
+        window.location.reload();
+  
+      }
+    }
+  };
+
   return (
     <Container>
       <div className="chat-header">
@@ -184,16 +249,26 @@ export default function ChatGroupContainer({ currentChat, socket }) {
           </div>
           <div class="user-account-info dropdown-menu pull-right" id="popup_info_group">
               <ul class="us-links">
-                  <li class="li_leave_group" onClick={() => handlePopupConfirm()}>
-                    <img  src={Leave} alt="Leave"/>
-                    <a title="">Rời nhóm</a></li>
                   {
-                    isUserCreateGroup && ( <li class="li_delete_group" onClick={() => handlePopupConfirmDeleteGroup()}>
-                    <img  src={Remove} alt="Remove"/>
-                    <a title="" onclick="popupDoiMatKhau()">Xoá nhóm</a>
-                  </li>) 
+                    isUserCreateGroup && (<>
+                    <li class="li_delete_group add-user-group" onClick={() => handlePopupAddTV()}>
+                      <img  src={AddIcon} alt="Remove"/>
+                      <a title="" onclick="popupThemThanhVien()">Thêm thành viên</a>
+                    </li>
+                    <li class="li_delete_group" onClick={() => handlePopupConfirmDeleteGroup()}>
+                      <img  src={RemovUser} alt="Remove"/>
+                      <a title="" onclick="popupXoaThanhVien()">Xoá thành viên</a>
+                    </li>
+                    <li class="li_delete_group" onClick={() => handlePopupConfirmDeleteGroup()}>
+                      <img  src={Remove} alt="Remove"/>
+                      <a title="" onclick="popupDoiMatKhau()">Xoá nhóm</a>
+                    </li>
+                    </> ) 
                   }
-                 
+                    <li class="li_leave_group" onClick={() => handlePopupConfirm()}>
+                      <img  src={Leave} alt="Leave"/>
+                      <a title="">Rời nhóm</a>
+                    </li>
               </ul>
           </div>
         </div>
@@ -238,8 +313,11 @@ export default function ChatGroupContainer({ currentChat, socket }) {
             </div>
           );
         })}
+          <div className="message sended">
+            <img className ="imgSend" src={msg} alt="" />
+          </div>
       </div>
-      <ChatInput handleSendMsg={handleSendMsg} />
+      <ChatInput handleSendMsg={handleSendMsg} setImage = {handleSetImage}/>
        {/* POPUP LEAVE GROUP */}
         
       {
@@ -263,7 +341,7 @@ export default function ChatGroupContainer({ currentChat, socket }) {
               <h5>Hãy chọn trưởng nhóm khác trước khi rời nhóm!</h5>
             </div>
             <div className="listPopupAdminLeave">
-              <h4>Hãy chọn trưởng nhóm khác trước khi rời nhóm?</h4>
+             
             </div>
             <div className="bodyPopupLeave">
                 <div className="buttonCancelPopupLeave" onClick={() => leaveGroupChat()}>
@@ -370,6 +448,62 @@ export default function ChatGroupContainer({ currentChat, socket }) {
             </div>
           </div>
       </div>
+
+      {/* POPUP ADD GROUP */}
+      <div className="popupConfirmAdd" id="popup-confirm-add">
+        <div className="headerPopupLogout">
+          <h4>Chọn thành viên muốn thêm?</h4>
+          <div className="closePopupLogout" onClick={() => handlePopupAddTV()}>
+              <img
+                src={CloseIcon}
+                alt="CloseIcon"
+              />
+          </div>
+        </div>
+       
+        <div className="listPopupAdd">
+        {contacts.map((contact, index) => {
+                  return (
+                    <div
+                      key={contact._id}
+                      className={`contact`}
+                    >
+                      <input type="checkbox" 
+                        id="listUser" 
+                        name="listUser" 
+                        value={contact._id} 
+                        onChange={(e) => handleAddListUser(contact._id)} ></input>
+                      <div className="avatar">
+                        <img
+                          src={`data:image/svg+xml;base64,${contact.avatarImage}`}
+                          alt=""
+                        />
+                      </div>
+                      <div className="username">
+                        <h3>{contact.username}</h3>
+                      </div>
+                    </div>
+                    );
+                  })}
+                </div>
+                <div className="bodyPopupLogout">
+            <div className="buttonCancelPopupLogout" onClick={() => console.log()}>
+              <img
+                  src={ConfirmIcon}
+                  alt="ConfirmIcon"
+              />
+              <p>Xác nhận</p>
+            </div>
+            <div className="buttonCofirmPopupLogout" onClick={() => handlePopupAddTV()}>
+            <img
+                src={CancelIcon}
+                alt="CancelIcon"
+              />
+              <p>Huỷ</p>
+            </div>
+          </div>
+              
+      </div>
     </Container>
   );
 }
@@ -417,7 +551,7 @@ const Container = styled.div`
       animation: fadeIn 1s;
     }
     .user-account-info{
-      width: 150px;
+      width: 180px;
       background-color: #fff;
       position: absolute;
       left:10px;
@@ -426,6 +560,7 @@ const Container = styled.div`
       padding:5px 10px;
       visibility:hidden;
       li{
+        
         display: flex;
         align-items: center;
         height: 35px;
@@ -439,8 +574,15 @@ const Container = styled.div`
           text-decoration: none;
         }
       }
-      .li_leave_group{
+      .li_delete_group{
         border-bottom: 1px solid  #d1d1d1;
+      }
+      .add-user-group{
+        a{
+          color:green;
+        }
+      }
+      .li_leave_group{
         a{
           color: orange
         }
@@ -490,6 +632,9 @@ const Container = styled.div`
       justify-content: flex-end;
       .content {
         background-color: #4f04ff21;
+      }
+      .imgSend{
+        width: 200px;
       }
     }
     .recieved {
@@ -744,5 +889,92 @@ const Container = styled.div`
     -webkit-animation: fadeIn 1s;
     animation: fadeIn 1s;
   }
+
+  .popupConfirmAdd{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    width: 25%;
+    height:55%;
+    background-color: #ffffff;
+    position: absolute;
+    left:700px;
+    top: 200px;
+    padding:10px;
+    visibility:hidden;
+  }
+  .showPopupAdd {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+  }
+  .listPopupAdd{
+
+  }
+  .bodyPopupAdd{
+    width: 100%;
+    height:20%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .buttonCancelPopupLogout{
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      background-color: #bfb;
+      border-radius: 1rem;
+      padding:7px 12px;
+      justify-content: space-between;
+      img{
+        width: 2rem;
+      }
+    }
+
+    .buttonCofirmPopupLogout{
+      width: 100px;
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      background-color: #fbf;
+      border-radius: 1rem;
+      padding:7px 10px;
+      justify-content: space-around;
+      img{
+        width:1.6rem;
+      }
+    }
+  }
+    .contact {
+      background-color: #ffffff34;
+      min-height: 5rem;
+      cursor: pointer;
+      width: 90%;
+      border-radius: 0.2rem;
+      padding: 0.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      transition: 0.5s ease-in-out;
+      display: flex;
+      flex-direction: row;
+      align-items:center;
+      .avatar {
+        img {
+          height: 3rem;
+        }
+      }
+      .username {
+        h3 {
+          color: black;
+        }
+      }
+    }
+    .selected {
+      background-color: #9a86f3;
+    }
   
 `;

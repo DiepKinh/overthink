@@ -16,8 +16,8 @@ const Login = props => {
   const {navigation} = props;
   const [isFocusUsername, setFocusUsername] = useState(false);
   const [isFocusPassword, setFocusPassword] = useState(false);
-  const [username, setUsername] = useState('0326876983');
-  const [password, setPassword] = useState('123456');
+  const [username, setUsername] = useState('thu123');
+  const [password, setPassword] = useState('12345678');
   const loginReducer = useSelector(state => state.userReducers.login);
   const dispatch = useDispatch();
   const styles = useDynamicStyleSheet(dynamicStyles);
@@ -100,7 +100,7 @@ const Login = props => {
             Chào mừng bạn đến với
           </Text>
           <Text style={[styles.textWelcome, {fontWeight: '700', fontSize: 35}]}>
-            Doctor Health
+            Overthink
           </Text>
         </View>
         <View style={styles.body}>
@@ -113,7 +113,7 @@ const Login = props => {
             </Text>
           </View>
           <View style={styles.viewContainerInput}>
-            <Text style={styles.txtLable}>Số điện thoại</Text>
+            <Text style={styles.txtLable}>Tên đăng nhập</Text>
             <View
               style={
                 isFocusUsername ? styles.viewInputFocus : styles.viewInput
@@ -121,7 +121,7 @@ const Login = props => {
               <TextInput
                 placeholderTextColor={'rgba(168, 167, 167, 0.7)'}
                 style={styles.txtInput}
-                placeholder="Nhập số điện thoại của bạn"
+                placeholder="Nhập tên đăng nhập"
                 value={username}
                 onChangeText={text => setUsername(text)}
                 autoCapitalize="none"
@@ -165,7 +165,6 @@ const Login = props => {
           <TouchableOpacity
             style={styles.btnLogin}
             onPress={handleLogin}
-            // onPress={() => navigation.navigate('HomeScreen')}
             disabled={loginReducer.requesting}>
             <Text style={styles.lbLogin}>Đăng nhập</Text>
           </TouchableOpacity>
@@ -176,7 +175,7 @@ const Login = props => {
             <Text
               style={[
                 styles.txtRegister,
-                {color: '#5DC9BF', fontWeight: '700'},
+                {color: '#4E0EFF', fontWeight: '700'},
               ]}>
               Đăng ký ngay
             </Text>
